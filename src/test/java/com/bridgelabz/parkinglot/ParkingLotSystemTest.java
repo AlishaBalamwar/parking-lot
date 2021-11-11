@@ -6,9 +6,9 @@ import org.junit.Test;
 public class ParkingLotSystemTest {
 
     @Test
-    public void givenAVehicle_whenParked_ShouldReturnTrue(){
-    ParkingLotSystem parkingLot = new ParkingLotSystem();
-    Boolean isPark = parkingLot.park(new Object());
-    Assert.assertTrue(isPark);
+    public void givenAVehicle_whenParked_ShouldReturnTrue() {
+        ParkingLotSystem parkingLot = new ParkingLotSystem();
+        boolean isPark = parkingLot.park(new Object());
+        Assert.assertTrue(isPark);
     }
 }
