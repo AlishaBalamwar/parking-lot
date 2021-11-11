@@ -3,36 +3,48 @@ package com.bridgelabz.parkinglot;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
 
 public class ParkingLotSystemTest {
 
-    Object vehicle = null;
-    ParkingLotSystem parkingLot = null;
+    Object vehicle;
+    ParkingLotSystem parkingLotSystem;
 
     @Before
     public void setUp() throws Exception {
         vehicle = new Object();
-        parkingLot = new ParkingLotSystem();
+        parkingLotSystem = new ParkingLotSystem();
     }
 
     @Test
     public void givenAVehicle_WhenParked_ShouldReturnTrue() {
-        boolean isPark = parkingLot.park(new Object());
-        Assert.assertTrue(isPark);
+        try {
+            parkingLotSystem.park(vehicle);
+            boolean isParked = parkingLotSystem.isVehicleParked(vehicle);
+            Assert.assertTrue(isParked);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void givenAVehicle_WhenAlreadyPark_ShouldReturnFalse() {
-        parkingLot.park(vehicle);
-        boolean isPark = parkingLot.park(new Object());
-        Assert.assertFalse(isPark);
+        try {
+            parkingLotSystem.park(vehicle);
+            parkingLotSystem.park(new Object());
+        } catch (ParkingLotException e) {
+            Assert.assertEquals("Parking Lot is Full", e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void givenAVehicle_WhenUnParked_ShouldReturnTrue() {
-        parkingLot.park(vehicle);
-        boolean isUnParked = parkingLot.UnPark(vehicle);
-        Assert.assertTrue(isUnParked);
+        try {
+            parkingLotSystem.park(vehicle);
+            boolean isUnParked = parkingLotSystem.UnPark(vehicle);
+            Assert.assertTrue(isUnParked);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
     }
 }
