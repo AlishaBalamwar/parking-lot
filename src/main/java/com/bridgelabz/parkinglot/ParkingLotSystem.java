@@ -1,5 +1,8 @@
 package com.bridgelabz.parkinglot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Purpose : Class which has all parking lot behaviours
  *
@@ -8,21 +11,46 @@ package com.bridgelabz.parkinglot;
  */
 public class ParkingLotSystem {
 
-    private Object vehicle;
+    private List vehicles;
+    private int actualCapacity;
+    private ParkingLotOwner owner;
 
-    public ParkingLotSystem() {
+    public ParkingLotSystem(int capacity) {
+        this.vehicles = new ArrayList();
+        this.actualCapacity = capacity;
     }
 
     /**
-     * Purpose: Parks the vehicle when slot is has vacant spaces
+     * @param owner-> To make owner known to Parking Lot System and register it.
+     * @return
+     */
+    public boolean registerOwner(ParkingLotOwner owner) {
+        this.owner = owner;
+        return true;
+    }
+
+    /**
+     * @param capacity-> To set capacity according to need
+     */
+    public void setCapacity(int capacity) {
+        this.actualCapacity = capacity;
+    }
+
+    /**
+     * Purpose: Parks the vehicle when slot
      *
      * @param vehicle : reference type of object
      * @throws ParkingLotException
      */
     public void park(Object vehicle) throws ParkingLotException {
-        if (this.vehicle != null)
+        if (this.vehicles.size() == this.actualCapacity) {
+            owner.capacityIsFull();
             throw new ParkingLotException("Parking Lot is Full");
-        this.vehicle = vehicle;
+        }
+        if (isVehicleParked(vehicle)) {
+            throw new ParkingLotException("Vehicle is already parked");
+        }
+        this.vehicles.add(vehicle);
     }
 
     /**
@@ -35,8 +63,8 @@ public class ParkingLotSystem {
         if (vehicle == null) {
             return false;
         }
-        if (this.vehicle.equals(vehicle)) {
-            this.vehicle = null;
+        if (this.vehicles.contains(vehicle)) {
+            this.vehicles.remove(vehicle);
             return true;
         }
         return false;
@@ -49,7 +77,7 @@ public class ParkingLotSystem {
      * @return
      */
     public boolean isVehicleParked(Object vehicle) {
-        if (this.vehicle.equals(vehicle))
+        if (this.vehicles.contains(vehicle))
             return true;
         return false;
     }

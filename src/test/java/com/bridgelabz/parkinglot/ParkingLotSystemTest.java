@@ -1,18 +1,18 @@
 package com.bridgelabz.parkinglot;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 public class ParkingLotSystemTest {
 
     Object vehicle;
     ParkingLotSystem parkingLotSystem;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         vehicle = new Object();
-        parkingLotSystem = new ParkingLotSystem();
+        parkingLotSystem = new ParkingLotSystem(1);
     }
 
     @Test
@@ -20,19 +20,8 @@ public class ParkingLotSystemTest {
         try {
             parkingLotSystem.park(vehicle);
             boolean isParked = parkingLotSystem.isVehicleParked(vehicle);
-            Assert.assertTrue(isParked);
+            Assertions.assertTrue(isParked);
         } catch (ParkingLotException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void givenAVehicle_WhenAlreadyPark_ShouldReturnFalse() {
-        try {
-            parkingLotSystem.park(vehicle);
-            parkingLotSystem.park(new Object());
-        } catch (ParkingLotException e) {
-            Assert.assertEquals("Parking Lot is Full", e.getMessage());
             e.printStackTrace();
         }
     }
@@ -42,7 +31,37 @@ public class ParkingLotSystemTest {
         try {
             parkingLotSystem.park(vehicle);
             boolean isUnParked = parkingLotSystem.UnPark(vehicle);
-            Assert.assertTrue(isUnParked);
+            Assertions.assertTrue(isUnParked);
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void givenWhenAParkingLotIsFull_ShouldInformOwner() {
+        ParkingLotOwner owner = new ParkingLotOwner();
+        parkingLotSystem.setCapacity(1);
+        parkingLotSystem.registerOwner(owner);
+        try {
+            parkingLotSystem.park(vehicle);
+            parkingLotSystem.park(new Object());
+        } catch (ParkingLotException e) {
+            e.printStackTrace();
+        }
+        boolean capacityFull = owner.isCapacityFull();
+        Assertions.assertTrue(capacityFull);
+    }
+
+    @Test
+    public void givenCapacityIs2_ShouldBeAbleToPark2Vehicles() {
+        Object vehicle2 = new Object();
+        parkingLotSystem.setCapacity(2);
+        try {
+            parkingLotSystem.park(vehicle);
+            parkingLotSystem.park(vehicle2);
+            boolean isParked1 = parkingLotSystem.isVehicleParked(vehicle);
+            boolean isParked2 = parkingLotSystem.isVehicleParked(vehicle2);
+            Assertions.assertTrue(isParked1 && isParked2);
         } catch (ParkingLotException e) {
             e.printStackTrace();
         }
