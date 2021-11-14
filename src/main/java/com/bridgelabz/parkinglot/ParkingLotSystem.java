@@ -11,14 +11,13 @@ import java.util.List;
  */
 public class ParkingLotSystem {
 
-    private List vehicles;
-    private int actualCapacity;
-    private List<ParkingLotObserver> observers;
+    private static List vehicles;
+    private static int actualCapacity;
+    private static List<ParkingLotObserver> observers;
 
-    public ParkingLotSystem(int capacity) {
+    public ParkingLotSystem() {
         this.observers = new ArrayList<>();
         this.vehicles = new ArrayList();
-        this.actualCapacity = capacity;
     }
 
     /**

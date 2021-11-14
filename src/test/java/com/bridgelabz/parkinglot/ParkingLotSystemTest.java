@@ -12,7 +12,7 @@ public class ParkingLotSystemTest {
     @BeforeEach
     public void setUp() throws Exception {
         vehicle = new Object();
-        parkingLotSystem = new ParkingLotSystem(1);
+        parkingLotSystem = new ParkingLotSystem();
     }
 
     @Test
@@ -83,6 +83,7 @@ public class ParkingLotSystemTest {
 
     @Test
     public void givenWhenParkingLotSpaceIsAvailableAfterFull_ShouldReturnTrue() {
+        parkingLotSystem.setCapacity(2);
         ParkingLotOwner owner = new ParkingLotOwner();
         Object vehicle2 = new Object();
         parkingLotSystem.registerParkingLotObserver(owner);
@@ -95,5 +96,14 @@ public class ParkingLotSystemTest {
         parkingLotSystem.UnPark(vehicle);
         boolean capacityFull = owner.isCapacityFull();
         Assertions.assertFalse(capacityFull);
+    }
+
+    @Test
+    public void givenToParkVehicleByAttendant_ShouldReturnTrue() throws ParkingLotException {
+        parkingLotSystem.setCapacity(2);
+        ParkingLotAttendant parkingLotAttendant = new ParkingLotAttendant();
+        parkingLotAttendant.parkVehicle(vehicle);
+        boolean isParked = parkingLotSystem.isVehicleParked(vehicle);
+        Assertions.assertTrue(isParked);
     }
 }
