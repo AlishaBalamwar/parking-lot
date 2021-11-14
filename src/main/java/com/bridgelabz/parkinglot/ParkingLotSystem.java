@@ -52,6 +52,7 @@ public class ParkingLotSystem {
             throw new ParkingLotException("Parking Lot is Full");
         }
         this.vehicles.add(vehicle);
+        ParkingLotOwner.parkedTime(vehicle);
     }
 
     /**
