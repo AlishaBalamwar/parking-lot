@@ -1,9 +1,9 @@
 package com.bridgelabz.parkinglot;
 
 /**
- * Purpose: This class contains all behaviours of owner
+ * Purpose: This class contains all behaviours of owner and implements from parkingLotObserver
  */
-public class ParkingLotOwner {
+public class ParkingLotOwner implements ParkingLotObserver {
     private boolean isFullCapacity;
 
     public void capacityIsFull() {
