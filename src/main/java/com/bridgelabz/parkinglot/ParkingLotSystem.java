@@ -85,4 +85,29 @@ public class ParkingLotSystem {
             return true;
         return false;
     }
+
+    /**
+     * Purpose: To find the spot of vehicle if vehicle is present in the parking lot.
+     *
+     * @param vehicle-> this is vehicle which need to be find
+     * @throws ParkingLotException
+     * @return-> Returns the index of it.
+     */
+    public int findVehicle(Object vehicle) throws ParkingLotException {
+        if (vehicles.contains(vehicle)) {
+            ParkingLotDriver.spottedAt(vehicles.indexOf(vehicle));
+            return vehicles.indexOf(vehicle);
+        }
+        throw new ParkingLotException("Vehicle is not Present in the lot");
+    }
+
+    /**
+     * Purpose: to find the object at particular spot.
+     *
+     * @param vehicleFind->spot where to find vehicle
+     * @return -> vehicle
+     */
+    public Object findSpot(int vehicleFind) {
+        return vehicles.get(vehicleFind);
+    }
 }
