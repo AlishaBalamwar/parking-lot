@@ -6,7 +6,7 @@ package com.bridgelabz.parkinglot;
 public class ParkingLotAttendant {
     ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
 
-    public void parkVehicle(Object vehicle) throws ParkingLotException {
+    public void parkVehicle( Vehicle vehicle) throws ParkingLotException {
         parkingLotSystem.park(vehicle);
     }
 }

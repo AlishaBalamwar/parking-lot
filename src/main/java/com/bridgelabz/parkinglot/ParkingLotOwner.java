@@ -9,17 +9,6 @@ import java.util.HashMap;
  */
 public class ParkingLotOwner implements ParkingLotObserver {
     private boolean isFullCapacity;
-    static HashMap<Object, LocalDateTime> localDateTimeHashMap = new HashMap<>();
-    static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd--HH:mm:ss");
-
-    /**
-     * Purpose: Storing Time of vehicle when vehicle is parked.
-     * @param vehicle
-     */
-    public static void parkedTime(Object vehicle) {
-        LocalDateTime now = LocalDateTime.now();
-        localDateTimeHashMap.put(vehicle, now);
-    }
 
     public void capacityIsFull() {
         isFullCapacity = true;
