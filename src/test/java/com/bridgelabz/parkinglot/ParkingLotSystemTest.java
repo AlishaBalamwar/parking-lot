@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class ParkingLotSystemTest {
 
     Vehicle vehicle;
@@ -11,7 +14,7 @@ public class ParkingLotSystemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        vehicle = new Vehicle("MH49-1122", "AUDI",false,"WHITE");
+        vehicle = new Vehicle("MH49-1122", Vehicle.Size.SMALL, "AUDI", false, "WHITE");
         parkingLotSystem = new ParkingLotSystem();
     }
 
@@ -35,17 +38,17 @@ public class ParkingLotSystemTest {
     public void givenWhenAParkingLotIsFull_ShouldInformOwner() throws ParkingLotException {
         parkingLotSystem.setCapacity(1);
         ParkingLotOwner owner = new ParkingLotOwner();
-        parkingLotSystem.registerParkingLotObserver(owner);
-        Vehicle vehicle1 = new Vehicle("MH49-2233","INOVA",false,"BLUE");
-        Vehicle vehicle2 = new Vehicle("MH49-3344","INOVA-CRYSTA",false,"RED");
+        parkingLotSystem.setParkingLotObserver(owner);
+        Vehicle vehicle1 = new Vehicle("MH49-2233", Vehicle.Size.MEDIUM, "INOVA", false, "BLUE");
+        Vehicle vehicle2 = new Vehicle("MH49-3344", Vehicle.Size.SMALL, "INOVA-CRYSTA", false, "RED");
         parkingLotSystem.park(vehicle);
         parkingLotSystem.park(vehicle1);
-        Assertions.assertThrows(ParkingLotException.class,()-> ParkingLotSystem.park(vehicle2));
+        Assertions.assertThrows(ParkingLotException.class, () -> ParkingLotSystem.park(vehicle2));
     }
 
     @Test
     public void givenCapacityIs2_ShouldBeAbleToPark2Vehicles() {
-        Vehicle vehicle2 = new Vehicle("MH49-2233","INOVA",false,"BLUE");
+        Vehicle vehicle2 = new Vehicle("MH49-2233", Vehicle.Size.SMALL, "INOVA", false, "BLUE");
         parkingLotSystem.setCapacity(2);
         try {
             parkingLotSystem.park(vehicle);
@@ -62,19 +65,19 @@ public class ParkingLotSystemTest {
     public void givenWhenParkingLotIsFull_ShouldInformSecurity() throws ParkingLotException {
         parkingLotSystem.setCapacity(1);
         AirportSecurity airportSecurity = new AirportSecurity();
-        parkingLotSystem.registerParkingLotObserver(airportSecurity);
-        Vehicle vehicle1 = new Vehicle("MH49-2233","INOVA",false,"BLUE");
+        parkingLotSystem.setParkingLotObserver(airportSecurity);
+        Vehicle vehicle1 = new Vehicle("MH49-2233", Vehicle.Size.SMALL, "INOVA", false, "BLUE");
         parkingLotSystem.park(vehicle);
         parkingLotSystem.park(vehicle1);
-        Vehicle vehicle2 = new Vehicle("MH49-3344","INOVA-CRYSTA",false,"RED");
-        Assertions.assertThrows(ParkingLotException.class,()-> ParkingLotSystem.park(vehicle2));
+        Vehicle vehicle2 = new Vehicle("MH49-3344", Vehicle.Size.SMALL, "INOVA-CRYSTA", false, "RED");
+        Assertions.assertThrows(ParkingLotException.class, () -> ParkingLotSystem.park(vehicle2));
     }
 
     @Test
     public void givenWhenParkingLotSpaceIsAvailableAfterFull_ShouldReturnTrue() throws ParkingLotException {
         parkingLotSystem.setCapacity(1);
         ParkingLotOwner owner = new ParkingLotOwner();
-        parkingLotSystem.registerParkingLotObserver(owner);
+        parkingLotSystem.setParkingLotObserver(owner);
         parkingLotSystem.park(vehicle);
         parkingLotSystem.unPark(vehicle);
         boolean capacityFull = owner.isCapacityFull();
@@ -95,25 +98,26 @@ public class ParkingLotSystemTest {
         parkingLotSystem.setCapacity(2);
         parkingLotSystem.park(vehicle);
         int indexOfVehicle = parkingLotSystem.findVehicle(vehicle);
-        Assertions.assertEquals(0, indexOfVehicle);
+        Assertions.assertEquals(1, indexOfVehicle);
     }
 
     @Test
     public void givenAVehicleAndTimeWhenOwnerWantsToKnowTime_ShouldReturnTrue() throws ParkingLotException {
-        parkingLotSystem.setCapacity(2);
+        parkingLotSystem.setCapacity(1);
         parkingLotSystem.park(vehicle);
-        String parkedTime = ParkingLotSystem.getParkTime(vehicle);
-        Assertions.assertEquals(ParkingLotSystem.getDateTime(), parkedTime);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        String parkedTime = now.format(formatter);
+        ParkingLotOwner owner = new ParkingLotOwner();
+        Assertions.assertEquals(parkedTime, owner.getTime(vehicle));
     }
 
+
     @Test
-    public void givenAVehicleIfDriverIsHandicapped_ShouldReturnTrue() throws ParkingLotException {
-        parkingLotSystem.setCapacity(4);
-        Vehicle vehicle1 = new Vehicle("MH49-2233","INOVA",false,"BLUE");
-        Vehicle vehicle2 = new Vehicle("MH49-3344","INOVA-CRYSTA",false,"RED");
+    public void givenAVehicle_WhenSearchedForWhiteCar_ShouldReturnTrue() throws ParkingLotException {
+        parkingLotSystem.setCapacity(1);
         parkingLotSystem.park(vehicle);
-        parkingLotSystem.park(vehicle1);
-        parkingLotSystem.park(vehicle2);
-        Assertions.assertTrue(parkingLotSystem.isVehicleParked(vehicle2));
+        int spotNumber = ParkingLotSystem.GetPositionByColor(vehicle, "WHITE");
+        Assertions.assertEquals(0, spotNumber);
     }
 }
