@@ -64,6 +64,9 @@ public class ParkingLotSystem {
         checkingByPolice(vehicle);
     }
 
+    /**
+     * Purpose : checking by the police to avoid threat and get sort of vehicle
+     */
     private static void checkingByPolice(Vehicle vehicle) throws ParkingLotException {
         if (vehicle.getVehicleColor().equals("WHITE"))
             Police.getAllWhiteCars(GetPositionByColor(vehicle, "WHITE"));

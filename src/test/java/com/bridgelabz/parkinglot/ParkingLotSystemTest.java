@@ -14,7 +14,7 @@ public class ParkingLotSystemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        vehicle = new Vehicle("MH49-1122", Vehicle.Size.SMALL, "AUDI", false, "WHITE");
+        vehicle = new Vehicle("MH-KL1122", Vehicle.Size.SMALL, "AUDI", false, "WHITE");
         parkingLotSystem = new ParkingLotSystem();
     }
 
@@ -39,8 +39,8 @@ public class ParkingLotSystemTest {
         parkingLotSystem.setCapacity(1);
         ParkingLotOwner owner = new ParkingLotOwner();
         parkingLotSystem.setParkingLotObserver(owner);
-        Vehicle vehicle1 = new Vehicle("MH49-2233", Vehicle.Size.MEDIUM, "INOVA", false, "BLUE");
-        Vehicle vehicle2 = new Vehicle("MH49-3344", Vehicle.Size.SMALL, "INOVA-CRYSTA", false, "RED");
+        Vehicle vehicle1 = new Vehicle("MH-NM2233", Vehicle.Size.MEDIUM, "INOVA", false, "BLUE");
+        Vehicle vehicle2 = new Vehicle("MH-NM3344", Vehicle.Size.SMALL, "INOVA-CRYSTA", false, "RED");
         parkingLotSystem.park(vehicle);
         parkingLotSystem.park(vehicle1);
         Assertions.assertThrows(ParkingLotException.class, () -> ParkingLotSystem.park(vehicle2));
@@ -48,7 +48,7 @@ public class ParkingLotSystemTest {
 
     @Test
     public void givenCapacityIs2_ShouldBeAbleToPark2Vehicles() {
-        Vehicle vehicle2 = new Vehicle("MH49-2233", Vehicle.Size.SMALL, "INOVA", false, "BLUE");
+        Vehicle vehicle2 = new Vehicle("MH-NP2233", Vehicle.Size.SMALL, "INOVA", false, "BLUE");
         parkingLotSystem.setCapacity(2);
         try {
             parkingLotSystem.park(vehicle);
@@ -66,10 +66,10 @@ public class ParkingLotSystemTest {
         parkingLotSystem.setCapacity(1);
         AirportSecurity airportSecurity = new AirportSecurity();
         parkingLotSystem.setParkingLotObserver(airportSecurity);
-        Vehicle vehicle1 = new Vehicle("MH49-2233", Vehicle.Size.SMALL, "INOVA", false, "BLUE");
+        Vehicle vehicle1 = new Vehicle("MH-PQ2233", Vehicle.Size.SMALL, "INOVA", false, "BLUE");
         parkingLotSystem.park(vehicle);
         parkingLotSystem.park(vehicle1);
-        Vehicle vehicle2 = new Vehicle("MH49-3344", Vehicle.Size.SMALL, "INOVA-CRYSTA", false, "RED");
+        Vehicle vehicle2 = new Vehicle("MH-KL3344", Vehicle.Size.SMALL, "INOVA-CRYSTA", false, "RED");
         Assertions.assertThrows(ParkingLotException.class, () -> ParkingLotSystem.park(vehicle2));
     }
 
@@ -133,10 +133,18 @@ public class ParkingLotSystemTest {
     @Test
     void givenBlueToyotaVehicle_whenParks_shouldBeKnownToPolice() throws ParkingLotException {
         parkingLotSystem.setCapacity(1);
-        Vehicle vehicle1 = new Vehicle("MH49-8877", Vehicle.Size.LARGE, "Toyota",
+        Vehicle vehicle1 = new Vehicle("MH-KL1234", Vehicle.Size.LARGE, "Toyota",
                 false, "blue");
         parkingLotSystem.park(vehicle1);
         boolean checks = Police.checkBlueToyota(vehicle1);
         Assertions.assertTrue(checks);
+    }
+
+    @Test
+    void givenVehicle_whenParks_shouldValidatedForNumberPLate() throws ParkingLotException {
+        parkingLotSystem.setCapacity(1);
+        parkingLotSystem.park(vehicle);
+        boolean checkValidity = Police.validateVehicleNumber(vehicle);
+        Assertions.assertTrue(checkValidity);
     }
 }

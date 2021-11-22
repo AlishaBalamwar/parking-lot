@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Purpose : To list All spot of white cars
@@ -47,6 +49,18 @@ public class Police {
 
     public static boolean checkBlueToyota(Vehicle vehicle) {
         return toyotaBlueCars.contains(vehicle);
+    }
+
+    /**
+     * Purpose : to find if the given vehicle has fraudulent number plate.
+     *
+     * @param vehicle : Given Vehicle will be used to check the number
+     * @return : Returns false if the number is fraudulent.
+     */
+    public static boolean validateVehicleNumber(Vehicle vehicle) {
+        Pattern pattern = Pattern.compile("^[A-Z]{2}[ -1][A-Z]{2}[0-9]{4,}$");
+        Matcher matcher = pattern.matcher(vehicle.getVehicleNumber());
+        return matcher.matches();
     }
 
 }
