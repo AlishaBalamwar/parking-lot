@@ -61,8 +61,16 @@ public class ParkingLotSystem {
             parkingLot1.add(vehicle);
         ParkingLotOwner.parkedTime(vehicle);
         checkCapacity();
+        checkingByPolice(vehicle);
+    }
+
+    private static void checkingByPolice(Vehicle vehicle) throws ParkingLotException {
         if (vehicle.getVehicleColor().equals("WHITE"))
             Police.getAllWhiteCars(GetPositionByColor(vehicle, "WHITE"));
+        if (vehicle.getVehicleColor().equals("blue") && vehicle.getVehicleName().equals("Toyota"))
+            Police.getAllToyotaBlueCars(vehicle);
+        if (vehicle.getVehicleName().equals("BMW"))
+            Police.getAllBMWCars(findVehicle(vehicle));
     }
 
     /**
@@ -135,7 +143,7 @@ public class ParkingLotSystem {
      * @return spot number of vehicle
      * @throws ParkingLotException : When vehicle is not present
      */
-    public int findVehicle(Vehicle vehicle) throws ParkingLotException {
+    public static int findVehicle(Vehicle vehicle) throws ParkingLotException {
         for (Vehicle slot : parkingLot1) {
             if (slot.equals(vehicle))
                 return parkingLot1.indexOf(slot) + 1;

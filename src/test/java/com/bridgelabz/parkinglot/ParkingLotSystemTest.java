@@ -120,4 +120,23 @@ public class ParkingLotSystemTest {
         int spotNumber = ParkingLotSystem.GetPositionByColor(vehicle, "WHITE");
         Assertions.assertEquals(0, spotNumber);
     }
+
+    @Test
+    void givenWhiteVehicle_whenParks_shouldBeKnownToPolice() throws ParkingLotException {
+        parkingLotSystem.setCapacity(1);
+        parkingLotSystem.park(vehicle);
+        int spotNumber = parkingLotSystem.GetPositionByColor(vehicle, "WHITE");
+        boolean checkForWhiteCarsSpot = Police.whiteCarsContains(spotNumber);
+        Assertions.assertTrue(checkForWhiteCarsSpot);
+    }
+
+    @Test
+    void givenBlueToyotaVehicle_whenParks_shouldBeKnownToPolice() throws ParkingLotException {
+        parkingLotSystem.setCapacity(1);
+        Vehicle vehicle1 = new Vehicle("MH49-8877", Vehicle.Size.LARGE, "Toyota",
+                false, "blue");
+        parkingLotSystem.park(vehicle1);
+        boolean checks = Police.checkBlueToyota(vehicle1);
+        Assertions.assertTrue(checks);
+    }
 }
